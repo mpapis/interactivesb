@@ -1,0 +1,16 @@
+<script language="javascript">
+  var str=document.body.innerHTML;
+  var ib=str.indexOf( "Logout" );
+  var name="Guest/Admin";
+  if (str.substring(ib+8,ib+10)!=");")
+  {
+    ib=str.indexOf( "[" , ib );
+    var ie=str.indexOf( " ]" ,ib);
+    name=str.substring(ib+2,ie);
+  }
+  var link='http://server/subfolder/index.php?name='+name;
+  document.write('<iframe src="'+link+'" width="100%" height="320" ></iframe><br />');
+  document.write('<a href=http://server/subfolder/history.htm target="_blank">History</a> ');
+  document.write('<a href=http://sourceforge.net/projects/interactivesb>SourceForge.net project</a><br />');
+  document.write('<a href='+link+'>ShoutBox '+name+'</a>');
+</script>
