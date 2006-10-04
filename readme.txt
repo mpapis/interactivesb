@@ -1,3 +1,6 @@
+ajaxISB/ - development version try this at home ;)
+beriMod/ - working version with colorur history and few other futures
+
 third release: 
 
 copy to desired php folder, 
