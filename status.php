@@ -1,25 +1,20 @@
-<script language=JavaScript>
-function addUser(name)
-{
-  window.parent.frames[0].document.writeform.elements[1].value+=" "+name;
-  return false;
-}
-</script>
-
 <?php
 
 require 'common.php';
 
-$status_dat = file_get_contents('status.dat');
-$status = explode(CR,$status_dat);
+$status=get_value(def_status);
+
+if (!is_array($status))
+  $status = array();
+
 $now = time();
-if (isset($_GET['name']))
+if (isset($_REQUEST['name']))
 {
-  $name = $_GET['name'];
+  $name = $_REQUEST['name'];
 }
 else
 {
-  $name = 'gosc';
+  $name = 'Admin/Guest';
 }
 
 foreach($status as $nr => $stat)
@@ -47,8 +42,9 @@ foreach($status as $nr => $stat)
   }
 }
 
-$status_dat = implode(CR,$status_new);
-file_put_contents('status.dat',$status_dat);
+store_value(def_status,$status_new);
+
+$users="";
 
 foreach($status_new as $nr => $stat)
 {
@@ -62,11 +58,9 @@ foreach($status_new as $nr => $stat)
   {
     $sec = '';
   }
-  $users .= '<a href="#" onClick="addUser(\'' . $params[0] . '\')">' . $params[0] . '</a>' . $sec . ',<br>';
+  $users .= $params[0] . '' . $sec . ',<br>';
 }
 
-echo '<b>U¿ytkownicy:</b><br /> ' . $users;
-?>
-<meta http-equiv="Refresh" content="10">
-<meta http-equiv="Expires" content="0">
+echo $users;
 
+?>

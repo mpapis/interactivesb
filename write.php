@@ -1,49 +1,52 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-	<title>ShoutBox</title>
-	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-2">
-</head>
 <?php
-if (preg_match("/MSIE/i", "$useragent"))
-{
-echo '<body onload="document.all.body_.focus();">
-';
-}
-else
-{
-echo '<body onload="document.writeform.body_.focus();">
-';
-}
-$useragent = getenv("HTTP_USER_AGENT");
 
-if (preg_match("/MSIE/i", "$useragent"))
-{
-  $post_script = 'document.all.body.value=document.all.body_.value; document.all.body_.value=\'\';';
-}
-else
-{
-  $post_script = 'document.writeform.body.value=document.writeform.body_.value; document.writeform.body_.value=\'\';';
-}
+session_start();
+session_register('last_data');
+session_register('last_data_nr');
 
-if(isset($_REQUEST['name']))
+require 'common.php';
+
+//if(isset($_GET['shout']))
 {
-echo '<form name="writeform" action="mesage.php?name=' . $_REQUEST['name'] . '" method="post" target="msg" style="border: none" onsubmit="' . $post_script . '">
-';
-echo '  <input type="hidden" name="name" value="' . $_REQUEST['name'] . '" id="name" />
-';
-}
-else
-{
-echo '<form name="writeform" action="mesage.php" method="post" target="msg" style="border: none" onsubmit="' . $post_script . '">
-';
-echo '  User:<input type="text" name="name" value="" size="23" id="name" onclick="if (this.value==\'Name\') this.value = \'\';" />
-';
+	if(empty($_GET['name']) || empty($_GET['body']))
+	{
+		echo("Błąd");
+	}
+        else
+	{
+                $time_to_add = datef(time());
+                $name_to_add = formatf($_GET['name']);
+                $body_to_add = formatf($_GET['body']);
+
+		$content = get_value(def_messages);
+                if (!is_array($content)) $content = array();
+
+                if( empty($_SESSION['last_data']) || ($_SESSION['last_data'] != $body_to_add) || ($content[0][2]!=$_SESSION['last_data']) )
+                {
+			array_unshift($content,$time_to_add.TAB.$name_to_add.TAB.$body_to_add);
+			$_SESSION['last_data']=$body_to_add;
+			$_SESSION['last_data_nr']=1;
+                }
+                else
+                {
+			$_SESSION['last_data_nr']=$_SESSION['last_data_nr']+1;
+			$line1 = explode(TAB,$content[0]);
+			$line1[0]=$time_to_add;
+			$line1[2]=$body_to_add . ' <b>(x ' . $_SESSION['last_data_nr'] . ')</b>';
+			$content[0] = $line1[0] . ":" . $line1[0] . ":" . $line1[0];
+                }
+
+		$count_l = count($content);
+		while ( count($content) > $show_shouts )
+		{
+		  array_pop($content);
+		}
+		store_value(def_messages, $content);
+
+		$content = file_get_contents('history.htm');
+                $content = formatfall($time_to_add,$name_to_add,$body_to_add) . CR . $content;
+		file_put_contents('history.htm', trim($content));
+		echo("OK");
+	}
 }
 ?>
-  <input type="text" name="body_" value="" size="50" maxsize="200" style="width:100%" id="body_" onclick="if (this.value=='Message') this.value = '';" />
-  <input type="hidden" name="body" value="" id="body" readonly="false" />
-  <input type="hidden" name="shout" />
-</form>
-</body>
-</html>
