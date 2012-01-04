@@ -8,25 +8,20 @@
   if(isset($_REQUEST['name']))
   {
     echo '
-<frameset cols="*,120">
- <frameset rows="30,*">
-  <frame name="write" src="write.php?name=' . $_REQUEST['name'] . '" scrolling="no" marginheight="1" noresize />
-  <frame name="msg" src="mesage.htm" scrolling="auto" marginheight="5"  />
-  </frameset>
-<frame name="status" src="status.php?name=' . $_REQUEST['name'] . '" scrolling="no"  marginheight="1"/>
+<frameset rows="30,*,20" >
+	<frame name="write" src="write.php?name=' . $_REQUEST['name'] . '" scrolling="no" marginheight="1" noresize />
+	<frame name="msg" src="mesage.htm" scrolling="auto" marginheight="5"  />
+	<frame name="status" src="status.php?name=' . $_REQUEST['name'] . '" marginheight="1"/>
 </frameset>';
   }
   else
   {
     echo '
-<frameset cols="*,120">
- <frameset rows="30,*">
-  <frame name="write" src="write.php" scrolling="no" marginheight="1" noresize />
-  <frame name="msg" src="mesage.htm" scrolling="auto" marginheight="5"  />
-  </frameset>
-<frame name="status" src="status.php" scrolling="no" marginheight="1"/>
+<frameset rows="30,*,20" >
+	<frame name="write" src="write.php" scrolling="no" marginheight="1" noresize />
+	<frame name="msg" src="mesage.htm" scrolling="auto" marginheight="5"  />
+	<frame name="status" src="status.php" marginheight="1"/>
 </frameset>';
   }
 ?>
 </html>
-

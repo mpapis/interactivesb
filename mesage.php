@@ -7,7 +7,7 @@ require 'common.php';
 
 ob_start();
 $show_shouts = 10;
-$timezone = 2;
+$timezone = 1;
 
 
 //Error Reporting. ~_^
